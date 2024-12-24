@@ -5,7 +5,7 @@ import OrderList from '@/components/order/order-list';
 import { Fragment, useState } from 'react';
 import ErrorMessage from '@/components/ui/error-message';
 import Loader from '@/components/ui/loader/loader';
-import { useOrdersQuery } from '@/data/order';
+import { useOrdersQuery, useOrdersQueryV2 } from '@/data/order';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { SortOrder } from '@/types';
@@ -49,7 +49,16 @@ export default function Orders() {
     }
   );
   const shopId = shopData?.id!;
-  const { orders, loading, paginatorInfo, error } = useOrdersQuery({
+  // const { orders, loading, paginatorInfo, error } = useOrdersQuery({
+  //   language: locale,
+  //   limit: 20,
+  //   page,
+  //   orderBy,
+  //   sortedBy,
+  //   tracking_number: searchTerm,
+  // });
+
+  const { ordersV2, loading, paginatorInfo, error } = useOrdersQueryV2({
     language: locale,
     limit: 20,
     page,
@@ -57,6 +66,10 @@ export default function Orders() {
     sortedBy,
     tracking_number: searchTerm,
   });
+
+    // console.log('Original: ', orders);
+    console.log('V2', ordersV2);
+
   const { refetch } = useExportOrderQuery(
     {
       ...(shopId && { shop_id: shopId }),
@@ -137,13 +150,13 @@ export default function Orders() {
         </div>
       </Card>
 
-      <OrderList
+      {/* <OrderList
         orders={orders}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
         onOrder={setOrder}
         onSort={setColumn}
-      />
+      /> */}
     </>
   );
 }

@@ -50,20 +50,6 @@ export default function ProductsPage() {
     sortedBy,
   });
 
-  console.log('paginatorInfo in ProductsPage: ', paginatorInfo)
-
-  // const { products_v2, loading, paginatorInfo, error } = useProductsQuery_v2({
-  //   language: locale,
-  //   limit: 20,
-  //   page,
-  //   type,
-  //   categories: category,
-  //   product_type: productType,
-  //   name: searchTerm,
-  //   orderBy,
-  //   sortedBy,
-  // });
-
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -76,8 +62,6 @@ export default function ProductsPage() {
     setPage(current);
   }
 
-  console.log('products: ', products)
-  // console.log('products_v2: ', products_v2)
 
   return (
     <>

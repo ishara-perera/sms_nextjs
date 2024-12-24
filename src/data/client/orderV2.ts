@@ -8,32 +8,25 @@ import {
   GenerateInvoiceDownloadUrlInput,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
-import { crudFactory } from './curd-factory';
 import { HttpClient } from './http-client';
 import { HttpClient_v2 } from './http-client_v2';
+import { crudFactory_v2 } from './curd-factory_v2';
 
-export const orderClient = {
-  ...crudFactory<Order, QueryOptions, CreateOrderInput>(API_ENDPOINTS.ORDERS),
+export const orderClientV2 = {
+  ...crudFactory_v2<Order, QueryOptions, CreateOrderInput>(API_ENDPOINTS.ORDERS),
   get: ({ id, language }: { id: string; language: string }) => {
     return HttpClient.get<Order>(`${API_ENDPOINTS.ORDERS}/${id}`, {
       language,
     });
   },
   paginated: ({ tracking_number, ...params }: Partial<OrderQueryOptions>) => {
-    return HttpClient.get<OrderPaginator>(API_ENDPOINTS.ORDERS, {
-      searchJoin: 'and',
-      ...params,
-      search: HttpClient.formatSearchParams({ tracking_number }),
-    });
-  },
-
-  paginatedV2: ({ tracking_number, ...params }: Partial<OrderQueryOptions>) => {
     return HttpClient_v2.get<OrderPaginator>(API_ENDPOINTS.ORDERS, {
       searchJoin: 'and',
       ...params,
       search: HttpClient_v2.formatSearchParams({ tracking_number }),
     });
   },
+
   downloadInvoice: (input: GenerateInvoiceDownloadUrlInput) => {
     return HttpClient.post<string>(
       `${API_ENDPOINTS.ORDER_INVOICE_DOWNLOAD}`,

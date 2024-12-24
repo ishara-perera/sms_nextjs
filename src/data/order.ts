@@ -14,6 +14,7 @@ import {
 import { orderClient } from './client/order';
 import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
+import { orderClientV2 } from './client/orderV2';
 
 export const useOrdersQuery = (
   params: Partial<OrderQueryOptions>,
@@ -30,6 +31,27 @@ export const useOrdersQuery = (
   );
   return {
     orders: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
+};
+
+export const useOrdersQueryV2 = (
+  params: Partial<OrderQueryOptions>,
+  options: any = {}
+) => {
+  const { data, error, isLoading } = useQuery<OrderPaginator, Error>(
+    [API_ENDPOINTS.ORDERS, params],
+    ({ queryKey, pageParam }) =>
+      orderClientV2.paginated(Object.assign({}, queryKey[1], pageParam)),
+    {
+      keepPreviousData: true,
+      ...options,
+    }
+  );
+  return {
+    ordersV2: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data),
     error,
     loading: isLoading,
